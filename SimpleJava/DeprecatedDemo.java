@@ -4,6 +4,7 @@
 //Isinya adalah tentang demonstrasi penggunaan annotation deprecated
 //dibuat oleh saya
 
+
 // @DefinisiClass(
 //     name="DeprecatedDemo",
 //     isi="Isinya adalah tentang demonstrasi penggunaan annotation deprecated",\

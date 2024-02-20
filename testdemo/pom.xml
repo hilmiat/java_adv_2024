@@ -19,6 +19,27 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>io.github.shaohuizhe</groupId>
+      <artifactId>jdbc</artifactId>
+      <version>10.4.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.shaohuizhe</groupId>
+      <artifactId>pdf</artifactId>
+      <version>1.3.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.optionfactory.spring</groupId>
+      <artifactId>pdf</artifactId>
+      <version>9.5</version>
+    </dependency>
+
+
+   
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

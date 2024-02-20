@@ -2,8 +2,13 @@ package id.my.hilmiat;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Optional;
 
+import id.my.hilmiat.dao.DAOUser;
 import id.my.hilmiat.db.Database;
 import id.my.hilmiat.entity.User;
 
@@ -21,16 +26,17 @@ public class App
         user1.setPassword("Rahasia");
         // user1.setId(1);
         // user1.getPassword();
-        testKoneksi();
-    }
-
-    public static void testKoneksi(){
-        try {
-            Connection koneksi = Database.getDatabase().getKoneksi();
-        } catch (ClassNotFoundException | SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }   
+        //cari user di database dengan id 2
+        DAOUser dao = new DAOUser();
+        Optional optional = dao.get(3L);
+        
+        if(optional.isPresent()){
+            User userdb = (User) optional.get();
+            System.out.println("Ketemu "+userdb.getUsername());
+        }else{
+            System.out.println("Not found");
+        }
+            
     }
 
 }

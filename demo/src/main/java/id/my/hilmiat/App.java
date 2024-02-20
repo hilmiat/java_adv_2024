@@ -21,14 +21,15 @@ public class App
     public static void main( String[] args )
     {
         User user1 = new User();
-        user1.setUsername("hilmiat");
-        user1.setEmail("hilmiat@gmail.com");
+        user1.setUsername("hilmiat2");
+        user1.setEmail("hilmiat2@gmail.com");
         user1.setPassword("Rahasia");
         // user1.setId(1);
         // user1.getPassword();
+
         //cari user di database dengan id 2
         DAOUser dao = new DAOUser();
-        Optional optional = dao.get(3L);
+        Optional optional = dao.get(2L);
         
         if(optional.isPresent()){
             User userdb = (User) optional.get();
@@ -36,6 +37,9 @@ public class App
         }else{
             System.out.println("Not found");
         }
+
+        //test insert data
+        dao.addData(user1);
             
     }
 

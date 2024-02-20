@@ -24,7 +24,7 @@ public class User {
     @Getter @Setter
     private String email;
 
-    @Setter
+    @Setter @Getter
     private String password;
 
 }

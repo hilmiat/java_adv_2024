@@ -46,8 +46,28 @@ public class DAOUser implements DAO{
 
     @Override
     public Object addData(Object newData) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addData'");
+        //siapkan query
+        String sql = "insert into user (username,email,password) values (?,?,?)";
+        Connection koneksi;
+        try {
+            koneksi = Database.getDatabase().getKoneksi();
+            PreparedStatement ps = koneksi.prepareStatement(sql);
+            //set parameter
+            User data = (User) newData;
+            ps.setString(1, data.getUsername());//?1
+            ps.setString(2, data.getEmail());//?2
+            ps.setString(3, data.getPassword());//?3
+            //eksekusi
+            ps.executeUpdate();
+            return data;
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

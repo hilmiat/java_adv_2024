@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import id.my.hilmiat.dao.DAOUser;
@@ -39,8 +40,20 @@ public class App
         }
 
         //test insert data
-        dao.addData(user1);
-            
+        // dao.addData(user1);
+        //test delete data
+        // boolean status = dao.delete(1L);
+        // if(status){
+        //     System.out.println("Sukses delete data");
+        // }else{
+        //     System.out.println("gagal delete data");
+        // }
+        //test update
+        // dao.update(2L, new User("baru banget", "Email@mail.com", "password"));
+
+        //get all user
+         List data = dao.getAll();
+         System.out.println(data);
     }
 
 }

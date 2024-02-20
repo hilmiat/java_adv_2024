@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,8 +41,27 @@ public class DAOUser implements DAO{
 
     @Override
     public List getAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+        ArrayList<User> dataUser = new ArrayList<>();
+        Connection koneksi;
+        try {
+            koneksi = Database.getDatabase().getKoneksi();
+            String query = "select * from user";
+            PreparedStatement ps = koneksi.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                User user = new User(username, email, password);
+                dataUser.add(user);
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataUser;
     }
 
     @Override
@@ -72,14 +92,45 @@ public class DAOUser implements DAO{
 
     @Override
     public Object update(Long pk, Object updatedData) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        //cast updatedData menjadi user
+        User userUpdate = (User) updatedData;
+        //siapkan query
+        String sql = "UPDATE user set username=?, email=?, password=? where id=?";
+        Connection koneksi;
+        try{
+            koneksi = Database.getDatabase().getKoneksi();
+            PreparedStatement ps = koneksi.prepareStatement(sql);
+            //isi ?
+            ps.setString(1, userUpdate.getUsername());
+            ps.setString(2, userUpdate.getEmail());
+            ps.setString(3, userUpdate.getPassword());
+            ps.setLong(4, pk);
+            //execute
+            ps.executeUpdate();
+            return userUpdate;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public boolean delete(Long pk) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+       //siapkan query
+       String sql = "delete from user where id=?";
+       Connection koneksi;
+       try{
+            koneksi = Database.getDatabase().getKoneksi();
+            PreparedStatement ps = koneksi.prepareStatement(sql);
+            //set parameter id
+            ps.setLong(1, pk);
+            //execute
+            ps.executeUpdate();
+            return true;
+       }catch(Exception e){
+            e.printStackTrace();
+       }
+       return false;
     }
     
 }

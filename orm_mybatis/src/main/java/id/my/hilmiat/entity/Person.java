@@ -1,4 +1,4 @@
-package id.entity;
+package id.my.hilmiat.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

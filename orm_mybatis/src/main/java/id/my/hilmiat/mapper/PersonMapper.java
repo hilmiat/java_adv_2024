@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import id.entity.Person;
+import id.my.hilmiat.entity.Person;
 
 public interface PersonMapper {
     String sql = "select * from person";

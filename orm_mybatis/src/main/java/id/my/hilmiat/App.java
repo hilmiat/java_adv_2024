@@ -25,18 +25,21 @@ import id.my.hilmiat.mapper.PersonMapper;
  */
 public class App {
     public static void main(String[] args) {
-        Configuration conf = MyBatisConfig.konfigure();
-        SqlSessionFactory session = new SqlSessionFactoryBuilder().build(conf);
-        SqlSession sqlSession = session.openSession();
-        PersonMapper pm = sqlSession.getMapper(PersonMapper.class);
+        SqlSession session = MyBatisConfig.getSessionFactory().openSession();
+        PersonMapper pm = session.getMapper(PersonMapper.class);
+
+        // Configuration conf = MyBatisConfig.konfigure();
+        // SqlSessionFactory session = new SqlSessionFactoryBuilder().build(conf);
+        // SqlSession sqlSession = session.openSession();
+        // PersonMapper pm = sqlSession.getMapper(PersonMapper.class);
 
         // pm.addData(new Person(5L, "Person", "Baru"));
         // sqlSession.commit();
 
-        // List<Person> dataPerson = pm.getAll();
-        // for (Person p : dataPerson) {
-        //     System.out.println("Person: " + p.getFirstname());
-        // }
+        List<Person> dataPerson = pm.getAll();
+        for (Person p : dataPerson) {
+            System.out.println("Person: " + p.getFirstname());
+        }
         // System.out.println("Test get by id");
         // Person personcari = pm.get(3L);
         // System.out.println(personcari.getFirstname()+" "+personcari.getLastname());
@@ -50,8 +53,8 @@ public class App {
         // personcari = pm.get(3L);
         // System.out.println(personcari.getFirstname()+" "+personcari.getLastname());
 
-        pm.delete(3L);
-        sqlSession.commit();
+        // pm.delete(3L);
+        // sqlSession.commit();
     
     }
 

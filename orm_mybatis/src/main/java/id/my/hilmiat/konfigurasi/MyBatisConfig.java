@@ -1,7 +1,13 @@
 package id.my.hilmiat.konfigurasi;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.type.TypeAliasRegistry;
@@ -32,4 +38,19 @@ public class MyBatisConfig {
         config.addMapper(PersonMapper.class);
         return config;
     }
+    //configure dari file
+    public static SqlSessionFactory getSessionFactory() {
+        String fileconfig = "mybatis-config.xml";
+        InputStream input;
+        try {
+            input = Resources.getResourceAsStream(fileconfig);
+            SqlSessionFactory sqlSession = new SqlSessionFactoryBuilder().build(input);
+            return sqlSession;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+    }
+
 }

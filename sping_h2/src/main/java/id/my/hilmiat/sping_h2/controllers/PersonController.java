@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import id.my.hilmiat.sping_h2.model.Person;
 import id.my.hilmiat.sping_h2.repository.PersonRepository;
+import id.my.hilmiat.sping_h2.repository.PersonService;
 
 @RestController
 @RequestMapping("person")
@@ -21,14 +23,19 @@ public class PersonController {
 
     @Autowired
     private final PersonRepository personRepository;
-
-	public PersonController(PersonRepository repo){
+    private final PersonService service;
+	public PersonController(PersonRepository repo, PersonService service){
 		this.personRepository = repo;
+        this.service = service;
 	}
 
-	@GetMapping
+	@GetMapping("/cari")
+	public List<Person> getPersons(@RequestParam("q") String q ){
+		return this.service.customQuery(q);
+	}
+    @GetMapping
 	public List<Person> getPersons(){
-		return this.personRepository.findAll();
+        return this.personRepository.findAll();
 	}
 
 	@PostMapping

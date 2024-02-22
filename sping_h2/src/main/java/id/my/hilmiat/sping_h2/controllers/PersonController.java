@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import id.my.hilmiat.sping_h2.exception.PersonNotFoundException;
 import id.my.hilmiat.sping_h2.model.Person;
 import id.my.hilmiat.sping_h2.repository.PersonRepository;
 import id.my.hilmiat.sping_h2.repository.PersonService;
@@ -45,7 +46,9 @@ public class PersonController {
 
     @GetMapping("/{id}")
     public Person getById(@PathVariable Long id){
-        return this.personRepository.findById(id).orElseThrow();
+        return this.personRepository
+        .findById(id)
+        .orElseThrow(()-> new PersonNotFoundException(id));
     }
 
     @PutMapping("/{id}")

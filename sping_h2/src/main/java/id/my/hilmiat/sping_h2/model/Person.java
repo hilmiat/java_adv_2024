@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +14,10 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Person {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Setter @Getter
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) 
     Long id;
-    @Column @Getter @Setter
+    @Column 
     String firstname, lastname;
 }

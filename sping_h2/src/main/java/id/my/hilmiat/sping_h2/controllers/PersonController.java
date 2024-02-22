@@ -3,6 +3,8 @@ package id.my.hilmiat.sping_h2.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +37,12 @@ public class PersonController {
 		return this.service.customQuery(q);
 	}
     @GetMapping
-	public List<Person> getPersons(){
-        return this.personRepository.findAll();
+	public Page<Person> getPersons(){
+        // return this.personRepository.findAll();
+        int pageNumber = 0;
+        int pageSize = 10;
+        PageRequest paging = PageRequest.of(pageNumber, pageSize);
+        return this.personRepository.findAll(paging);
 	}
 
 	@PostMapping

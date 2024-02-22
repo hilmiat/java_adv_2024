@@ -17,8 +17,11 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(PersonRepository personRepository){
         return args ->{
-            log.info("Inisialisasi data awal "+personRepository.save(new Person(1L,"Hilmy","Tawakal")));
-            log.info("Inisialisasi data awal "+personRepository.save(new Person(2L,"Adi","Sutisno")));
+            for(int i=1;i<1000;i++){
+                log.info("Inisialisasi data "+personRepository.save(new Person((long) i,"Hilmy "+i,"Tawakal")));
+            }
+            // log.info("Inisialisasi data awal "+personRepository.save(new Person(1L,"Hilmy","Tawakal")));
+            // log.info("Inisialisasi data awal "+personRepository.save(new Person(2L,"Adi","Sutisno")));
         };
     }
 }

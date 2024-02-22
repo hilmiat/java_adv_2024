@@ -45,7 +45,7 @@ public class MyBatisConfig {
         try {
             input = Resources.getResourceAsStream(fileconfig);
             SqlSessionFactory sqlSession = new SqlSessionFactoryBuilder().build(input);
-            return sqlSession;
+            returon;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

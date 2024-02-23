@@ -1,11 +1,16 @@
 package id.my.hilmiat.sping_h2.controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,12 +65,12 @@ public class PersonController {
         if(pageNumber<0 || pageSize<0){
             //tidak valid
         }
-        // Sort sorting1 = Sort.by("firstname").descending();
-        // Sort sorting2 = Sort.by("lastname").descending();
-        // Sort sorting = sorting1.and(sorting2);
 
         PageRequest paging = PageRequest.of(pageNumber, pageSize, sorting);
         return this.personRepository.findAll(paging);
+
+
+        
 	}
 
 	@PostMapping
@@ -74,10 +79,25 @@ public class PersonController {
 	}
 
     @GetMapping("/{id}")
-    public Person getById(@PathVariable Long id){
-        return this.personRepository
+    public EntityModel<Person> getById(@PathVariable Long id){
+
+        Person person = this.personRepository
         .findById(id)
         .orElseThrow(()-> new PersonNotFoundException(id));
+
+        // Link self = Link.of("test");
+
+        Link self = linkTo(methodOn(PersonController.class)
+            .getById(id))
+            .withSelfRel();
+        Link all = linkTo(methodOn(PersonController.class)
+            .getPersons(0, 10,null))
+            .withRel("persons");
+
+        return EntityModel.of(person,self,all);
+        
+
+       
     }
 
     @PutMapping("/{id}")

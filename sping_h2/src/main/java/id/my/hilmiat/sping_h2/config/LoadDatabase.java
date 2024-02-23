@@ -17,7 +17,7 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(PersonRepository personRepository){
         return args ->{
-            for(int i=1;i<1000;i++){
+            for(int i=1;i<10;i++){
                 log.info("Inisialisasi data "+personRepository.save(new Person((long) i,"Hilmy "+i,"Tawakal")));
             }
             // log.info("Inisialisasi data awal "+personRepository.save(new Person(1L,"Hilmy","Tawakal")));

@@ -13,13 +13,16 @@ import java.util.stream.Collectors;
 
 import org.hibernate.engine.internal.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -131,7 +134,7 @@ public class PersonController {
     }
 
 
-    private static String FOLDER_UPLOAD = "/tmp/uploads";
+    private static String FOLDER_UPLOAD = "src/main/resources/images";
 
     @PostMapping("/upload")
     public String fileUpload(
@@ -156,4 +159,54 @@ public class PersonController {
             return "Gagal upload file";
         }
     }
+
+    @GetMapping("/image")
+    public ResponseEntity<byte[]> getImages(){
+         ClassPathResource imgFile = new ClassPathResource("images/test.jpg");
+        byte[] data;
+		try {
+			data = StreamUtils.copyToByteArray(imgFile.getInputStream());
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(data);
+		} catch (IOException e) {
+			return (ResponseEntity<byte[]>) ResponseEntity.notFound();
+		}
+    }
+
+    @PostMapping("/{id}/upload")
+    public String uploadImagePerson(
+        @RequestParam(name = "file") MultipartFile file,
+        @PathVariable Long id
+    ){
+        if(file.isEmpty()){
+            ResponseEntity.badRequest();
+        }
+        try{
+            byte[] dataByte = file.getBytes();
+            Path dir = Paths.get(FOLDER_UPLOAD);
+            Path lokasi = Paths.get(FOLDER_UPLOAD,id+".jpg");
+            //jika folder belum ada
+            if(!Files.exists(dir)){
+                Files.createDirectories(dir);
+            }
+            //simpan file
+            Files.write(lokasi, dataByte);
+            return "Upload sukses di "+lokasi.toString();
+        }catch(IOException e){
+            e.printStackTrace();
+            return "Gagal upload file";
+        }
+
+    }
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getImages(@PathVariable Long id){
+         ClassPathResource imgFile = new ClassPathResource("images/"+id+".jpg");
+        byte[] data;
+		try {
+			data = StreamUtils.copyToByteArray(imgFile.getInputStream());
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(data);
+		} catch (IOException e) {
+			return (ResponseEntity<byte[]>) ResponseEntity.notFound();
+		}
+    }   
+    
 }

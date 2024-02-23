@@ -30,5 +30,14 @@ public class Person {
         return this.firstname+" "+this.lastname;
     }
 
+    public List<String> getHobbies(){
+        ArrayList<String> hobbies = new ArrayList<>();
+        hobbies.add("Memancing");
+        hobbies.add("Berkuda");
+        hobbies.add("Membaca");
+
+        return hobbies;
+    }
+
 
 }

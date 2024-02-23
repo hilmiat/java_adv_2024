@@ -19,11 +19,14 @@ public class PersonModelAssembler implements RepresentationModelAssembler<Person
         Link self = linkTo(methodOn(PersonController.class)
             .getById(entity.getId()))
             .withSelfRel();
+        Link image = linkTo(methodOn(PersonController.class)
+            .getImages(entity.getId())
+        ).withRel("images");
         Link all = linkTo(methodOn(PersonController.class)
             .getPersons(0, 10,null))
             .withRel("persons");
 
-        return EntityModel.of(entity,self,all);
+        return EntityModel.of(entity,self,image,all);
     }
     
 }

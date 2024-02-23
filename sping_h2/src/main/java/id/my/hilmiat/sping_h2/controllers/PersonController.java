@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,16 +33,38 @@ public class PersonController {
         this.service = service;
 	}
 
+    @GetMapping("/name")
+    public List<String> getPersonName(){
+        return this.personRepository.getName();
+    }
+
+
 	@GetMapping("/cari")
-	public List<Person> getPersons(@RequestParam("q") String q ){
-		return this.service.customQuery(q);
+	public Page<Person> getPersons(
+        @RequestParam(defaultValue = "",name = "q") String q,
+        @RequestParam(defaultValue = "0") int pageNumber,
+        @RequestParam(defaultValue = "10") int pageSize
+        ){
+        PageRequest paging = PageRequest.of(pageNumber, pageSize);
+		return this.service.customQuery(q,paging);
 	}
     @GetMapping
-	public Page<Person> getPersons(){
+	public Page<Person> getPersons(
+        @RequestParam(defaultValue = "0") int pageNumber,
+        @RequestParam(defaultValue = "10") int pageSize,
+        @RequestParam(defaultValue = "id,desc") String[] sort
+    ){
+        Sort sorting = Sort.by(sort[0]).ascending();
         // return this.personRepository.findAll();
-        int pageNumber = 0;
-        int pageSize = 10;
-        PageRequest paging = PageRequest.of(pageNumber, pageSize);
+        // filter nilai dari pageNumber dan pageSize agar > 0
+        if(pageNumber<0 || pageSize<0){
+            //tidak valid
+        }
+        // Sort sorting1 = Sort.by("firstname").descending();
+        // Sort sorting2 = Sort.by("lastname").descending();
+        // Sort sorting = sorting1.and(sorting2);
+
+        PageRequest paging = PageRequest.of(pageNumber, pageSize, sorting);
         return this.personRepository.findAll(paging);
 	}
 

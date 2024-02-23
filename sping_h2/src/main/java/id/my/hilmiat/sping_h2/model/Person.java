@@ -26,10 +26,8 @@ public class Person {
     @Column 
     String firstname, lastname;
 
-    List<String> getName(){
-        List<String> test = new ArrayList<>();
-        test.add("firstname"+firstname);
-        return test;
+    public String getName(){
+        return this.firstname+" "+this.lastname;
     }
 
 

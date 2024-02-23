@@ -1,0 +1,16 @@
+<hibernate-configuration>
+    <session-factory>
+        <property name="jakarta.persistence.jdbc.url">jdbc:mysql://localhost:3306/service_demo</property>
+        <property name="jakarta.persistence.jdbc.user">service_user</property> 
+        <property name="jakarta.persistence.jdbc.password">service_password</property> 
+        <property name="jakarta.persistence.jdbc.driver">com.mysql.cj.jdbc.Driver</property>
+         
+        <property name="jakarta.persistence.schema-generation.database.action">create-drop</property>
+        <!-- <property name="show_sql">true</property>
+        <property name="format_sql">true</property> -->
+
+        <mapping class="demo.entity.Departement"/>
+        <mapping class="demo.entity.Person"/>
+
+    </session-factory>
+</hibernate-configuration>

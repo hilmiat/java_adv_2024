@@ -28,4 +28,12 @@ public class PersonService {
         newPerson.setId(id);
         return repo.save(newPerson);
     }
+
+    public List<Person> getActivePerson(){
+        return repo.getActivePerson();
+    }
+
+    public List<Person> getPersonByDeptName(String name){
+        return repo.findAllByDepartemen_name(name);
+    }
 }

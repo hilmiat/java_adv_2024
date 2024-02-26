@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import id.my.hilmiat.sping_h2.model.Person;
 
 public interface PersonRepository extends JpaRepository<Person, Long>{
+
+
     List<Person> searchPersonByFirstnameOrLastname(String query,String query2);
 
     @Query(

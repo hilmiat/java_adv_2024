@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import id.my.hilmiat.spring_mysql.model.Person;
@@ -37,9 +38,20 @@ public class PersonController {
     Person updatePerson(@RequestBody Person newPerson,@PathVariable Long id){
         return personService.update(newPerson,id);
     }
-
     @DeleteMapping("/{id}")
     void deletePerson(@PathVariable Long id){
         personService.delete(id);
     }
+    
+    // demo query
+    @GetMapping("/active")
+    List<Person> getActive(){
+        return personService.getActivePerson();
+    }
+    @GetMapping("/bydept")
+    List<Person> getByDept(@RequestParam String name){
+        return personService.getPersonByDeptName(name);
+    }
+
+
 }

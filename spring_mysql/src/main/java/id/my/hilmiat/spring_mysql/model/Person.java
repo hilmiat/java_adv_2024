@@ -41,12 +41,10 @@ public class Person {
         this.updated_at = new Date();
         isActive = true;
     }
-
     @PreUpdate
     protected void onUpdate(){
         this.updated_at = new Date();
     }
-
 
     @ManyToOne(optional = false)
     @JoinColumn(name="id_departemen", nullable = false)

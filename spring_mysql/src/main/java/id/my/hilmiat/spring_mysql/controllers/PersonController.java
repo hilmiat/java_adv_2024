@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +40,7 @@ public class PersonController {
         return personService.update(newPerson);
     }
     @PutMapping("/{id}")
-    Person updatePerson(@RequestBody Person newPerson,@PathVariable Long id){
+    Person updatePerson(@RequestBody Person newPerson,@PathVariable Long id ){
         return personService.update(newPerson,id);
     }
     @DeleteMapping("/{id}")
@@ -74,5 +75,12 @@ public class PersonController {
         }
         return data;
     }
+
+    //test get user yang terotentikasi
+    @GetMapping("/me")
+    Person getMe(@AuthenticationPrincipal Person p){
+        return p;
+    }
+
 
 }

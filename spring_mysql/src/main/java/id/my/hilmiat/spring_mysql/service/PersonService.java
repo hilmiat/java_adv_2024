@@ -5,6 +5,7 @@ import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +25,14 @@ public class PersonService {
     public void delete(Long id){
         repo.deleteById(id);
     }
+
+    @Secured("ADMIN")
     public Person update(Person p){
         return repo.save(p);
     }
+
+
+    @Secured("OPERATOR")
     public Person update(Person newPerson, Long id) {
         newPerson.setId(id);
         return repo.save(newPerson);

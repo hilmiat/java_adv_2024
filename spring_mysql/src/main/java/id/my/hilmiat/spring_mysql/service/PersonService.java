@@ -1,9 +1,12 @@
 package id.my.hilmiat.spring_mysql.service;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import id.my.hilmiat.spring_mysql.model.Person;
 
@@ -36,4 +39,19 @@ public class PersonService {
     public List<Person> getPersonByDeptName(String name){
         return repo.findAllByDepartemen_name(name);
     }
+
+    //transaction
+    @Transactional
+    public void executeBeberapaQuery(){
+        //query 1
+        //query 2
+        asyncQuery(); //--> diluar trasaction
+        //query 3
+    }
+    @Async
+    public void asyncQuery(){
+        //query x
+    }
+
 }
+

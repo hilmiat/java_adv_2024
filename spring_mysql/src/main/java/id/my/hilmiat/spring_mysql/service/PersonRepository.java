@@ -1,6 +1,7 @@
 package id.my.hilmiat.spring_mysql.service;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,6 +23,12 @@ extends JpaRepository<Person, Long>{
 
     List<Person> findAllByDepartemen(Departemen d);
     List<Person> findAllByDepartemen_name(String dept_name);
+    
+    //penerapan async
+    @Query("select p from Person p")
+    Future<List<Person>> findVeryHard();
+
+
 
     //Cara 2: dengan annotation query
     @Query(value="select * from person where firstname like %?1%",nativeQuery = true)

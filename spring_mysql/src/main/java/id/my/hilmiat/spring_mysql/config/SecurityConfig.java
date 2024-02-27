@@ -23,63 +23,26 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-/**
- * JwtTokenFilter
- */
-class JwtTokenFilter extends OncePerRequestFilter {
-
-    // private final JwtTokenUtil tokenUtil;
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        //baca dari header, apakah ada token
-        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(!header.startsWith("Bearer ")){
-            filterChain.doFilter(request, response);
-            return;
-        }
-        //validasi token
-        final String token = header.split(" ")[1].trim();
-        // if(!tokenUtil.validate(token)){
-        //     filterChain.doFilter(request, response);
-        //     return;
-        // }
-
-        //get username
-        //cari di database
-
-
-    }
-
-    
-}
-
+import id.my.hilmiat.spring_mysql.security.JwtTokenFilter;
 
 @Configuration
 public class SecurityConfig {
 
-    private final JwtTokenFilter jwtTokenFilter;
-
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        return http.authorizeHttpRequests(
+        http.csrf(csrf->csrf.disable());
+        http.authorizeHttpRequests(
             (r)->r
             .requestMatchers(HttpMethod.PUT,"person").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.DELETE,"person").authenticated()
-            .requestMatchers("/person","/swagger-ui/**","/v3/**").permitAll()
+            .requestMatchers(HttpMethod.DELETE,"/person").authenticated()
+            .requestMatchers("/person","/swagger-ui/**","/v3/**","/auth/**").permitAll()
             .anyRequest().authenticated()
-        ).httpBasic(Customizer.withDefaults()).build();
-        // tambahkan JWT filter
-        http.addFilterBefore(jwtTokenFilter, null)
-
+        ).httpBasic(Customizer.withDefaults());
+        //tambahkan filter
+        http.addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean
@@ -91,8 +54,8 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(){
 
         UserDetails user = User.builder()
-        .username("user")
-        .password(passwordEncoder().encode("password"))
+        .username("bob")
+        .password(passwordEncoder().encode("rahasia"))
         .roles("USER").build();
 
         UserDetails admin = User.builder()
@@ -106,29 +69,29 @@ public class SecurityConfig {
     @Autowired
     private DataSource dataSource;
 
-    // @Autowired
-    // public void configUser(AuthenticationManagerBuilder auth) throws Exception{
-    //     auth.jdbcAuthentication().dataSource(dataSource);
-    // }
-
     @Autowired
     public void configUser(AuthenticationManagerBuilder auth) throws Exception{
         auth.jdbcAuthentication().dataSource(dataSource);
-        // .usersByUsernameQuery("select * from person where firstname =?");
     }
 
-    // @Bean
-    // AuthenticationManager manager(UserDetailsService userDetailsService){
-    //     return auth -> {
-    //         String username = auth.getPrincipal().toString();
-    //         String pass = auth.getCredentials().toString();
-            
-    //         // UserDetails user = userDetailsService.loadUserByUsername(username);
-    //         // if(!user.isEnabled()){
-    //         //     //user belum di enable
-    //         //     throw new DisabledException("User belum aktif");
-    //         // }
-    //         return new UsernamePasswordAuthenticationToken(username,null);
-    //     };
+    // @Autowired
+    // public void configUser(AuthenticationManagerBuilder auth) throws Exception{
+    //     auth.jdbcAuthentication().dataSource(dataSource);
+    //     // .usersByUsernameQuery("select * from person where firstname =?");
     // }
+
+    @Bean
+    AuthenticationManager manager(UserDetailsService userDetailsService){
+        return auth -> {
+            String username = auth.getPrincipal().toString();
+            String pass = auth.getCredentials().toString();
+            
+            UserDetails user = userDetailsService.loadUserByUsername(username);
+            if(!user.isEnabled()){
+            //     //user belum di enable
+                throw new DisabledException("User belum aktif");
+            }
+            return new UsernamePasswordAuthenticationToken(username,pass);
+        };
+    }
 }

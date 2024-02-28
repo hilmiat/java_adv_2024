@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,10 +29,15 @@ import id.my.hilmiat.spring_mysql.service.PersonService;
 public class PersonController {
     @Autowired
     PersonService personService;
-
+    private static final Logger log = LoggerFactory.getLogger(PersonController.class);
     @GetMapping
     List<Person> getAll(){
-       return personService.getAll();
+        List<Person> data = new ArrayList<>();
+        for(int i=0;i<10;i++){
+            data.addAll(personService.getAll());
+            log.info("Memanggil service ke="+i);
+        }
+       return data;
     }
     @GetMapping("/{id}")
     Person getById(@PathVariable Long id){
@@ -52,7 +59,11 @@ public class PersonController {
     // demo query
     @GetMapping("/active")
     List<Person> getActive(){
-        return personService.getActivePerson();
+        List<Person> data = new ArrayList<>();
+        for(int i=0;i<7;i++){
+            data.addAll(personService.getActivePerson());
+        }
+        return data;
     }
 
 

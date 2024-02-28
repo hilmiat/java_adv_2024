@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import id.my.hilmiat.spring_mysql.security.JwtTokenUtil;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
@@ -23,9 +24,9 @@ public class Auth {
     @Autowired
     AuthenticationManagerBuilder builder;
     // AuthenticationManager authenticationManager;
+    private static final Logger log = LoggerFactory.getLogger(Auth.class);
 
-
-    private static final Logger log = LoggerFactory.getLogger(JwtTokenUtil.class);
+    @RateLimiter(name = "auth-service")
     @PostMapping("/auth/token")
     public String getToken(@RequestBody String username,@RequestBody String password){
         //cek di database, ada user pass yang dikirima atau tidak

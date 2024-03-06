@@ -1,0 +1,50 @@
+spring:
+    jpa.hibernate.ddl-auto: create-drop
+    datasource:
+        url: jdbc:mysql://localhost:3306/action_learning
+        username: root
+        password: 
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+resilience4j.ratelimiter:
+  configs:
+    instances:
+      registerHealthIndicator: true
+
+resilience4j:
+    ratelimiter:
+        instances:
+            auth-service:
+                limitForPeriod: 2
+                limitRefreshPeriod: 30s
+                timeoutDuration: 2s
+                registerHealthIndicator: true
+            backendB:
+                limitForPeriod: 5
+                limitRefreshPeriod: 30s
+                timeoutDuration: 2s
+    retry:
+        instances:
+            retryA:
+                maxAttempts: 3
+                waitDuration: 30s
+
+# management:
+#     endpoints:
+#         enable-by-default: true
+#         web:
+#             exposure:
+#                 includes: "*"
+#     endpoint:
+#         health: 
+#             show-details: ALWAYS
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    info:
+      enabled: true
